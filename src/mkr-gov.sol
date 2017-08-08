@@ -15,16 +15,6 @@ contract MakerAuth is DSChief, DSRoles {
             return super.getUserRoles(who);
         }
     }
-    function setUserRole(address who, uint8 role, bool enabled) {
-        if( role == 0 ) {
-            throw;
-        } else {
-            super.setUserRole(who, role, enabled);
-        }
-    }
-    function setRootUser(address who, bool enabled) {
-        throw;
-    }
     function isUserRoot(address who)
         constant
         returns (bool)
@@ -35,6 +25,19 @@ contract MakerAuth is DSChief, DSRoles {
             return super.isUserRoot(who);
         }
     }
+    // function getCapabilityRoles
+    // function isCapabilityPublic
+    function setUserRole(address who, uint8 role, bool enabled) {
+        if( role == 0 ) {
+            throw;
+        } else {
+            super.setUserRole(who, role, enabled);
+        }
+    }
+    function setRootUser(address who, bool enabled) {
+        throw;
+    }
+
 }
 
 
