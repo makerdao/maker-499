@@ -7,17 +7,14 @@ import 'ds-vault/vault.sol';
 contract MakerUpdate499 {
     DSToken MKR;
     DSChief MKRChief;
-    DSVault MakerFiniteVault;
+    DSVault DevFund;
 
     function run() {
         MKR = new DSToken();
         MKRChief = new DSChief();
-        MakerFiniteVault = new DSVault(MKR);
-        // mkr token
-        // mkr chief
+        DevFund = new DSVault(MKR);
         // mkr redeemer
         // mkr burner
         // weth token
-        // "makerdao" vault
     }
 }
