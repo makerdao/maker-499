@@ -1,8 +1,13 @@
+pragma solidity ^0.4.15;
+
 import 'ds-chief/chief.sol';
 
-contract MakerTrueGenesis {
-    function MakerGovInitialize(ERC20 old_mkr) {
-        var MKR = new DSToken();
-        
+contract MakerUpdate499 {
+    function run() {
+        // mkr token
+        // mkr chief
+        // mkr redeemer
+        // mkr burner
+        // weth token
     }
 }
