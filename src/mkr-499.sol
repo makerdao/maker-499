@@ -1,3 +1,5 @@
+// (c) Dai Foundation, 2017
+
 pragma solidity ^0.4.15;
 
 import 'ds-chief/chief.sol';
@@ -30,11 +32,18 @@ contract MakerUpdate499 is DSThing {
     ERC20   public old_MKR;
     DSToken public MKR;
     Redeemer public redeemer;
+    uint    public undo_deadline;
+
+    function MakerUpdate499(ERC20 old_MKR_, uint undo_deadline_) {
+        old_MKR = old_MKR_;
+        undo_deadline = undo_deadline_;
+    }
 
     function run() public {
         MKR = new DSToken('MKR');
-        MKR.mint(1000000 ether);
-        redeemer = new Redeemer(old_MKR, MKR, now); // TODO now
+        MKR.mint(1000000 ether); // 10**6 * 10**18
+        redeemer = new Redeemer(old_MKR, MKR, undo_deadline); // TODO now
+        MKR.push(redeemer, 1000000 ether);
     }
 }
 
