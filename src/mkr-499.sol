@@ -2,7 +2,6 @@
 
 pragma solidity ^0.4.15;
 
-import 'ds-chief/chief.sol';
 import 'ds-token/token.sol';
 import 'ds-vault/vault.sol';
 
@@ -31,11 +30,13 @@ contract Redeemer is DSThing {
 }
 
 contract MakerUpdate499 is DSThing {
-    ERC20    public old_MKR;
-    DSToken  public MKR;
-    Redeemer public redeemer;
-    uint     public undo_deadline;
-    address  public authority;
+    ERC20        public old_MKR;
+    DSToken      public MKR;
+    Redeemer     public redeemer;
+    uint         public undo_deadline;
+    address      public authority;
+    DSMultiVault public df_vault;
+    DSMultiVault public dao_vault;
 
     function MakerUpdate499(address authority_, ERC20 old_MKR_, uint undo_deadline_) {
         old_MKR = old_MKR_;
@@ -50,6 +51,8 @@ contract MakerUpdate499 is DSThing {
         MKR.push(redeemer, 1000000 ether);
 
         MKR.setAuthority(authority);
+        df_vault.setAuthority(authority);
+        dao_vault.setAuthority(authority);
         redeemer.setAuthority(address(0)); // redundant, has no authed functions
     }
 }
