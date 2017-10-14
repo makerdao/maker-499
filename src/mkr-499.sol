@@ -27,22 +27,27 @@ contract Redeemer is DSThing {
 }
 
 contract MakerUpdate499 is DSThing {
-    DSToken MKR;
-    DSChief MKRChief;
-    DSVault DevFund;
+    ERC20   public old_MKR;
+    DSToken public MKR;
+    Redeemer public redeemer;
 
     function run() public {
         MKR = new DSToken('MKR');
         MKR.mint(1000000 ether);
+        redeemer = new Redeemer(old_MKR, MKR, now); // TODO now
+    }
+}
+
+contract MakerUpdate498 is DSThing {
+    function run() {
+/*
         var IOU = new DSToken('IOU');
         MKRChief = new DSChief(MKR, IOU, 3);
+        DevFund = new DSVault();
         MKR.setAuthority(MKRChief);
         IOU.setAuthority(MKRChief);
         MKR.setOwner(address(0));
         IOU.setOwner(address(0));
-        // DevFund = new DSVault();
-        // DevFund.swap(MKR);
-        // mkr burner
-        // weth token
+*/
     }
 }
