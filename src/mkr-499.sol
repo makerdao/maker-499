@@ -17,14 +17,14 @@ contract Redeemer is DSThing {
         undo_deadline = undo_deadline_;
     }
     function redeem() public {
-        require(from.transferFrom(msg.sender, this, wad));
         var wad = from.balanceOf(msg.sender);
+        require(from.transferFrom(msg.sender, this, wad));
         to.push(msg.sender, wad);
     }
     function undo() public {
+        var wad = to.balanceOf(msg.sender);
         require(now < undo_deadline);
         require(to.transfer(msg.sender, wad));
-        var wad = to.balanceOf(msg.sender);
         to.pull(msg.sender, wad);
     }
 }
@@ -34,11 +34,9 @@ contract MakerUpdate499 is DSThing {
     DSToken      public MKR;
     Redeemer     public redeemer;
     uint         public undo_deadline;
-    address      public authority;
-    DSMultiVault public df_vault;
-    DSMultiVault public dao_vault;
+    DSAuthority  public authority;
 
-    function MakerUpdate499(address authority_, ERC20 old_MKR_, uint undo_deadline_) {
+    function MakerUpdate499(DSAuthority authority_, ERC20 old_MKR_, uint undo_deadline_) public {
         old_MKR = old_MKR_;
         undo_deadline = undo_deadline_;
         authority = authority_;
@@ -51,15 +49,13 @@ contract MakerUpdate499 is DSThing {
         MKR.push(redeemer, 1000000 ether);
 
         MKR.setAuthority(authority);
-        df_vault.setAuthority(authority);
-        dao_vault.setAuthority(authority);
-        redeemer.setAuthority(address(0)); // redundant, has no authed functions
+        redeemer.setAuthority(DSAuthority(address(0))); // redundant, has no authed functions
     }
 }
 
 contract MakerUpdate498 is DSThing {
-    function run() {
 /*
+    function run() {
         var IOU = new DSToken('IOU');
         MKRChief = new DSChief(MKR, IOU, 3);
         DevFund = new DSVault();
@@ -67,6 +63,6 @@ contract MakerUpdate498 is DSThing {
         IOU.setAuthority(MKRChief);
         MKR.setOwner(address(0));
         IOU.setOwner(address(0));
-*/
     }
+*/
 }
