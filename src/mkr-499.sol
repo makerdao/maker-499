@@ -24,7 +24,7 @@ contract Redeemer is DSThing {
     function undo() public {
         var wad = to.balanceOf(msg.sender);
         require(now < undo_deadline);
-        require(to.transfer(msg.sender, wad));
+        require(from.transfer(msg.sender, wad));
         to.pull(msg.sender, wad);
     }
 }
