@@ -17,14 +17,15 @@ contract Redeemer is DSThing {
         undo_deadline = undo_deadline_;
     }
     function redeem() public {
-        require(from.transferFrom(msg.sender, this, wad));
         var wad = from.balanceOf(msg.sender);
+        require(from.transferFrom(msg.sender, this, wad));
         to.push(msg.sender, wad);
     }
     function undo() public {
         require(now < undo_deadline);
-        require(to.transfer(msg.sender, wad));
+
         var wad = to.balanceOf(msg.sender);
+        require(to.transfer(msg.sender, wad));
         to.pull(msg.sender, wad);
     }
 }
