@@ -36,7 +36,12 @@ contract MakerUpdate499 is DSThing {
     uint         public undo_deadline;
     DSAuthority  public authority;
 
-    function MakerUpdate499(DSAuthority authority_, ERC20 old_MKR_, uint undo_deadline_) public {
+    function MakerUpdate499(DSAuthority authority_
+                           , ERC20 old_MKR_
+                           , uint undo_deadline_
+                           )
+        public
+    {
         old_MKR = old_MKR_;
         undo_deadline = undo_deadline_;
         authority = authority_;
@@ -55,7 +60,7 @@ contract MakerUpdate499 is DSThing {
 
 contract MakerUpdate498 is DSThing {
 /*
-    function run() {
+    function run() public {
         var IOU = new DSToken('IOU');
         MKRChief = new DSChief(MKR, IOU, 3);
         DevFund = new DSVault();
