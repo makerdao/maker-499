@@ -35,11 +35,16 @@ contract MakerUpdate499 is DSThing {
     DSToken      public MKR;
     Redeemer     public redeemer;
     uint         public undo_deadline;
-    address      public authority;
+    DSAuthority  public authority;
     DSMultiVault public df_vault;
     DSMultiVault public dao_vault;
 
-    function MakerUpdate499(address authority_, ERC20 old_MKR_, uint undo_deadline_) {
+    function MakerUpdate499(DSAuthority authority_
+                           , ERC20 old_MKR_
+                           , uint undo_deadline_
+                           )
+        public
+    {
         old_MKR = old_MKR_;
         undo_deadline = undo_deadline_;
         authority = authority_;
@@ -54,12 +59,12 @@ contract MakerUpdate499 is DSThing {
         MKR.setAuthority(authority);
         df_vault.setAuthority(authority);
         dao_vault.setAuthority(authority);
-        redeemer.setAuthority(address(0)); // redundant, has no authed functions
+        redeemer.setAuthority(DSAuthority(0)); // redundant, has no authed functions
     }
 }
 
 contract MakerUpdate498 is DSThing {
-    function run() {
+    function run() public {
 /*
         var IOU = new DSToken('IOU');
         MKRChief = new DSChief(MKR, IOU, 3);
