@@ -10,7 +10,7 @@ import 'ds-thing/thing.sol';
 contract Redeemer is DSThing {
     ERC20 from;
     DSToken to;
-    uint undo_deadline;
+    uint public undo_deadline;
     function Redeemer(ERC20 from_, DSToken to_, uint undo_deadline_) public {
         from = from_;
         to = to_;
@@ -24,7 +24,7 @@ contract Redeemer is DSThing {
     function undo() public {
         var wad = to.balanceOf(msg.sender);
         require(now < undo_deadline);
-        require(to.transfer(msg.sender, wad));
+        require(from.transfer(msg.sender, wad));
         to.pull(msg.sender, wad);
     }
 }
