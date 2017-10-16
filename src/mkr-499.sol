@@ -8,8 +8,8 @@ import 'ds-vault/vault.sol';
 import 'ds-thing/thing.sol';
 
 contract Redeemer is DSThing {
-    ERC20 from;
-    DSToken to;
+    ERC20 public from;
+    DSToken public to;
     uint public undo_deadline;
     function Redeemer(ERC20 from_, DSToken to_, uint undo_deadline_) public {
         from = from_;
