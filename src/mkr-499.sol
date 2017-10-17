@@ -7,10 +7,10 @@ import 'ds-vault/vault.sol';
 
 import 'ds-thing/thing.sol';
 
-contract Redeemer is DSThing {
-    ERC20 public from;
+contract Redeemer {
+    ERC20   public from;
     DSToken public to;
-    uint public undo_deadline;
+    uint    public undo_deadline;
     function Redeemer(ERC20 from_, DSToken to_, uint undo_deadline_) public {
         from = from_;
         to = to_;
@@ -54,7 +54,6 @@ contract MakerUpdate499 is DSThing {
         MKR.push(redeemer, 1000000 ether);
 
         MKR.setAuthority(authority);
-        redeemer.setAuthority(DSAuthority(address(0))); // redundant, has no authed functions
     }
 }
 
