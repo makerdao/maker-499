@@ -96,4 +96,16 @@ contract Maker499Test is DSTest {
         assertEq(update.MKR().balanceOf(user), 0);
         assertEq(old_MKR.balanceOf(user), initialBalance);
     }
+
+    function testFail_undo() public {
+        uint deadline = 0;
+        update = new MakerUpdate499(authority, old_MKR, deadline);
+        update.run();
+
+        assertEq(old_MKR.balanceOf(user), initialBalance);
+        user.doApprove(old_MKR, update.redeemer(), initialBalance);
+        user.doApprove(update.MKR(), update.redeemer(), initialBalance);
+        user.doRedeem(update.redeemer());
+        user.doUndo(update.redeemer());
+    }
 }
