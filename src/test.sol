@@ -20,6 +20,10 @@ contract MKRUser is TokenUser {
         r.redeem();
     }
 
+    function doUndo(Redeemer r) public {
+        r.undo();
+    }
+
     function doApprove(DSToken token, address recipient, uint amount)
             public
             returns (bool)
@@ -77,5 +81,19 @@ contract Maker499Test is DSTest {
         user.doRedeem(update.redeemer());
         assertEq(old_MKR.balanceOf(user), 0);
         assertEq(update.MKR().balanceOf(user), initialBalance);
+    }
+
+    function test_undo() public {
+        uint deadline = now + 1 days;
+        update = new MakerUpdate499(authority, old_MKR, deadline);
+        update.run();
+
+        assertEq(old_MKR.balanceOf(user), initialBalance);
+        user.doApprove(old_MKR, update.redeemer(), initialBalance);
+        user.doApprove(update.MKR(), update.redeemer(), initialBalance);
+        user.doRedeem(update.redeemer());
+        user.doUndo(update.redeemer());
+        assertEq(update.MKR().balanceOf(user), 0);
+        assertEq(old_MKR.balanceOf(user), initialBalance);
     }
 }
