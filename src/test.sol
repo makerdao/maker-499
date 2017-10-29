@@ -9,6 +9,7 @@ import "./mkr-499.sol";
 
 contract TestAuthority is DSAuthority {
     function canCall(address src, address dst, bytes4 sig) public view returns(bool) {
+        src; dst; sig;
         return true;
     }
 }
@@ -46,14 +47,6 @@ contract Maker499Test is DSTest {
         user = new MKRUser(old_MKR);
         old_MKR.push(user, initialBalance);
         authority = new TestAuthority();
-    }
-
-    function test_basic_sanity() public {
-        assert(true);
-    }
-
-    function testFail_basic_sanity() public {
-        assert(false);
     }
 
     function test_deploy() public {
