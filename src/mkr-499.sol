@@ -34,9 +34,8 @@ contract MakerUpdate499 is DSThing {
     DSToken      public MKR;
     Redeemer     public redeemer;
     uint         public undo_deadline;
-    DSAuthority  public authority;
 
-    function MakerUpdate499(DSAuthority authority_
+    function MakerUpdate499(address owner_
                            , ERC20 old_MKR_
                            , uint undo_deadline_
                            )
@@ -44,7 +43,7 @@ contract MakerUpdate499 is DSThing {
     {
         old_MKR = old_MKR_;
         undo_deadline = undo_deadline_;
-        authority = authority_;
+        owner = owner_;
     }
 
     function run() public {
@@ -53,7 +52,7 @@ contract MakerUpdate499 is DSThing {
         redeemer = new Redeemer(old_MKR, MKR, undo_deadline);
         MKR.push(redeemer, 1000000 ether);
 
-        MKR.setAuthority(authority);
+        MKR.setOwner(this.owner());
     }
 }
 
