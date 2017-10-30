@@ -3,7 +3,7 @@
 pragma solidity ^0.4.15;
 
 import 'ds-token/token.sol';
-import 'ds-vault/vault.sol';
+//import 'ds-vault/vault.sol';
 
 import 'ds-thing/thing.sol';
 
