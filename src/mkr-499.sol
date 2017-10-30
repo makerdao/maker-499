@@ -56,8 +56,9 @@ contract MakerUpdate499 is DSThing {
     }
 }
 
-contract MakerUpdate498 is DSThing {
 /*
+contract MakerUpdate498 is DSThing {
+
     function run() public {
         var IOU = new DSToken('IOU');
         MKRChief = new DSChief(MKR, IOU, 3);
@@ -67,5 +68,5 @@ contract MakerUpdate498 is DSThing {
         MKR.setOwner(address(0));
         IOU.setOwner(address(0));
     }
-*/
 }
+*/
