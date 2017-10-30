@@ -9,6 +9,7 @@ import "./mkr-499.sol";
 
 contract TestAuthority is DSAuthority {
     function canCall(address src, address dst, bytes4 sig) public view returns(bool) {
+        src; dst; sig;
         return true;
     }
 }
@@ -48,19 +49,20 @@ contract Maker499Test is DSTest {
         authority = new TestAuthority();
     }
 
-    function test_basic_sanity() public {
-        assert(true);
-    }
-
-    function testFail_basic_sanity() public {
-        assert(false);
-    }
-
     function test_deploy() public {
         uint deadline = now + 1 days;
         update = new MakerUpdate499(authority, old_MKR, deadline);
         assertEq(update.undo_deadline(), deadline);
         assertEq(address(update.old_MKR()), address(old_MKR));
+    }
+
+    function test_owner() public {
+        uint deadline = now + 1 days;
+        address owner = 0x123;
+        update = new MakerUpdate499(owner, old_MKR, deadline);
+        update.run();
+        assertEq(address(update.owner()), owner);
+        assertEq(address(update.MKR().owner()), owner);
     }
 
     function test_run() public {
