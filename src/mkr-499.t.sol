@@ -24,6 +24,10 @@ contract MKRUser is TokenUser {
     function doUndo(Redeemer r) public {
         r.undo();
     }
+    
+    function doReclaim(Redeemer r) public {
+        r.reclaim();
+    }
 
     function doApprove(DSToken token, address recipient, uint amount)
             public
@@ -56,13 +60,16 @@ contract Maker499Test is DSTest {
         assertEq(address(update.old_MKR()), address(old_MKR));
     }
 
-    function test_owner() public {
+    function test_owner_and_authority() public {
         uint deadline = now + 1 days;
         address owner = 0x123;
         update = new MakerUpdate499(owner, old_MKR, deadline);
         update.run();
         assertEq(address(update.owner()), owner);
         assertEq(address(update.MKR().owner()), owner);
+        assertEq(address(update.authority()), 0x0);
+        assertEq(address(update.MKR().authority()), 0x0);
+        assertEq(address(update.redeemer().authority()), owner);
     }
 
     function test_run() public {
@@ -99,6 +106,25 @@ contract Maker499Test is DSTest {
         assertEq(old_MKR.balanceOf(user), initialBalance);
     }
 
+    function test_reclaim() public {
+        uint deadline = now + 1 days;
+        update = new MakerUpdate499(authority, old_MKR, deadline);
+        update.run();
+
+        assertEq(update.MKR().balanceOf(update.redeemer()), initialBalance);
+        assertEq(update.MKR().balanceOf(authority), 0);
+
+        // user.doReclaim(update.redeemer());
+
+        // assertEq(old_MKR.balanceOf(user), initialBalance);
+        // user.doApprove(old_MKR, update.redeemer(), initialBalance);
+        // user.doApprove(update.MKR(), update.redeemer(), initialBalance);
+        // user.doRedeem(update.redeemer());
+        // user.doUndo(update.redeemer());
+        // assertEq(update.MKR().balanceOf(user), 0);
+        // assertEq(old_MKR.balanceOf(user), initialBalance);
+    }
+
     function testFail_undo() public {
         uint deadline = 0;
         update = new MakerUpdate499(authority, old_MKR, deadline);
@@ -109,5 +135,16 @@ contract Maker499Test is DSTest {
         user.doApprove(update.MKR(), update.redeemer(), initialBalance);
         user.doRedeem(update.redeemer());
         user.doUndo(update.redeemer());
+    }
+
+    function testFail_reclaim() public {
+        uint deadline = now + 1 days;
+        update = new MakerUpdate499(authority, old_MKR, deadline);
+        update.run();
+
+        assertEq(update.MKR().balanceOf(update.redeemer()), initialBalance);
+        assertEq(update.MKR().balanceOf(authority), 0);
+
+        user.doReclaim(update.redeemer());
     }
 }
