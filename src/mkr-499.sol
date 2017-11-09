@@ -57,7 +57,7 @@ contract MakerUpdate499 is DSAuth {
         redeemer = new Redeemer(old_MKR, MKR, undo_deadline);
         MKR.push(redeemer, 1000000 ether);
 
-        redeemer.setAuthority(DSAuthority(owner));
+        redeemer.setOwner(owner);
         MKR.setOwner(owner);
     }
 }
