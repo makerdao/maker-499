@@ -7,7 +7,7 @@ import 'ds-token/token.sol';
 
 import 'ds-thing/thing.sol';
 
-contract Redeemer {
+contract Redeemer is DSStop {
     ERC20   public from;
     DSToken public to;
     uint    public undo_deadline;
@@ -16,20 +16,24 @@ contract Redeemer {
         to = to_;
         undo_deadline = undo_deadline_;
     }
-    function redeem() public {
+    function redeem() public stoppable {
         var wad = from.balanceOf(msg.sender);
         require(from.transferFrom(msg.sender, this, wad));
         to.push(msg.sender, wad);
     }
-    function undo() public {
+    function undo() public stoppable {
         var wad = to.balanceOf(msg.sender);
         require(now < undo_deadline);
         require(from.transfer(msg.sender, wad));
         to.pull(msg.sender, wad);
     }
+    function reclaim() public auth {
+        var wad = to.balanceOf(this);
+        to.pull(msg.sender, wad);
+    }
 }
 
-contract MakerUpdate499 is DSThing {
+contract MakerUpdate499 is DSAuth {
     ERC20        public old_MKR;
     DSToken      public MKR;
     Redeemer     public redeemer;
@@ -52,7 +56,8 @@ contract MakerUpdate499 is DSThing {
         redeemer = new Redeemer(old_MKR, MKR, undo_deadline);
         MKR.push(redeemer, 1000000 ether);
 
-        MKR.setOwner(this.owner());
+        redeemer.setAuthority(DSAuthority(owner));
+        MKR.setOwner(owner);
     }
 }
 
