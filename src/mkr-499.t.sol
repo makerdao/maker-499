@@ -29,6 +29,10 @@ contract MKRUser is TokenUser {
         r.reclaim();
     }
 
+    function doStop(Redeemer r) public {
+        r.stop();
+    }
+
     function doApprove(DSToken token, address recipient, uint amount)
             public
             returns (bool)
@@ -109,21 +113,17 @@ contract Maker499Test is DSTest {
 
     function test_reclaim() public {
         uint deadline = now + 1 days;
-        update = new MakerUpdate499(authority, old_MKR, deadline);
+        update = new MakerUpdate499(user, old_MKR, deadline);
         update.run();
 
         assertEq(update.MKR().balanceOf(update.redeemer()), initialBalance);
-        assertEq(update.MKR().balanceOf(authority), 0);
+        assertEq(update.MKR().balanceOf(update.redeemer().owner()), 0);
 
-        // user.doReclaim(update.redeemer());
+        user.doStop(update.redeemer());
+        user.doReclaim(update.redeemer());
 
-        // assertEq(old_MKR.balanceOf(user), initialBalance);
-        // user.doApprove(old_MKR, update.redeemer(), initialBalance);
-        // user.doApprove(update.MKR(), update.redeemer(), initialBalance);
-        // user.doRedeem(update.redeemer());
-        // user.doUndo(update.redeemer());
-        // assertEq(update.MKR().balanceOf(user), 0);
-        // assertEq(old_MKR.balanceOf(user), initialBalance);
+        assertEq(update.MKR().balanceOf(update.redeemer()), 0);
+        assertEq(update.MKR().balanceOf(update.redeemer().owner()), initialBalance);
     }
 
     function testFail_undo() public {
