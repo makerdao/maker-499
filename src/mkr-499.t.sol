@@ -60,16 +60,17 @@ contract Maker499Test is DSTest {
         assertEq(address(update.old_MKR()), address(old_MKR));
     }
 
-    function test_owner_and_authority() public {
+    function test_owner() public {
         uint deadline = now + 1 days;
         address owner = 0x123;
         update = new MakerUpdate499(owner, old_MKR, deadline);
         update.run();
         assertEq(address(update.owner()), owner);
         assertEq(address(update.MKR().owner()), owner);
+        assertEq(address(update.redeemer().owner()), owner);
         assertEq(address(update.authority()), 0x0);
         assertEq(address(update.MKR().authority()), 0x0);
-        assertEq(address(update.redeemer().authority()), owner);
+        assertEq(address(update.redeemer().authority()), 0x0);
     }
 
     function test_run() public {
