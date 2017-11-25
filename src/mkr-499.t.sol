@@ -106,6 +106,10 @@ contract Maker499Test is DSTest {
         user.doApprove(old_MKR, update.redeemer(), initialBalance);
         user.doApprove(update.MKR(), update.redeemer(), initialBalance);
         user.doRedeem(update.redeemer());
+
+        assertEq(old_MKR.balanceOf(user), 0);
+        assertEq(update.MKR().balanceOf(user), initialBalance);
+
         user.doUndo(update.redeemer());
         assertEq(update.MKR().balanceOf(user), 0);
         assertEq(old_MKR.balanceOf(user), initialBalance);
@@ -117,13 +121,26 @@ contract Maker499Test is DSTest {
         update.run();
 
         assertEq(update.MKR().balanceOf(update.redeemer()), initialBalance);
-        assertEq(update.MKR().balanceOf(update.redeemer().owner()), 0);
+        assertEq(update.MKR().balanceOf(user), 0);
+        assertEq(old_MKR.balanceOf(user), initialBalance);
+        assertEq(old_MKR.balanceOf(update.redeemer()), 0);
+
+        user.doApprove(old_MKR, update.redeemer(), initialBalance);
+
+        user.doRedeem(update.redeemer());
+
+        assertEq(update.MKR().balanceOf(update.redeemer()), 0);
+        assertEq(update.MKR().balanceOf(user), initialBalance);
+        assertEq(old_MKR.balanceOf(update.redeemer()), initialBalance);
+        assertEq(old_MKR.balanceOf(user), 0);
 
         user.doStop(update.redeemer());
         user.doReclaim(update.redeemer());
 
         assertEq(update.MKR().balanceOf(update.redeemer()), 0);
-        assertEq(update.MKR().balanceOf(update.redeemer().owner()), initialBalance);
+        assertEq(update.MKR().balanceOf(user), initialBalance);
+        assertEq(old_MKR.balanceOf(update.redeemer()), 0);
+        assertEq(old_MKR.balanceOf(user), initialBalance);
     }
 
     function testFail_undo() public {

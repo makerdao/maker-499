@@ -29,7 +29,9 @@ contract Redeemer is DSStop {
     }
     function reclaim() public auth {
         require(stopped);
-        var wad = to.balanceOf(this);
+        var wad = from.balanceOf(this);
+        require(from.transfer(msg.sender, wad));
+        wad = to.balanceOf(this);
         to.push(msg.sender, wad);
     }
 }
